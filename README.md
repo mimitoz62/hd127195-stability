@@ -9,12 +9,18 @@ Research Notes of the AAS.
 
 - The published best-fit configuration (coplanar orbits, minimum masses) is regular, with MEGNO ⟨Y⟩ = 2.00, and
   survives 10⁷ orbits of planet b (14.6 Myr).
-- About a third of the configurations drawn from the published uncertainties are chaotic, although all of them pass
-  the angular momentum deficit (AMD) stability criterion used in the discovery fit; some break apart within 1.5 Myr.
+- Of 200 configurations drawn from the uncertainties, all pass the angular momentum deficit (AMD) stability criterion
+  used in the discovery fit, but only 134 are regular; 9 have close encounters within 2 × 10⁴ orbits and 16 more
+  within 10⁶ orbits (1.5 Myr).
 - Near the best-fit period ratio (1.566), regular orbits require e_c ≲ 0.1, and chaos becomes more common toward the
   8:5 commensurability.
-- If both masses scale as 1/sin i, stability sets a lower limit on the orbital inclination and an upper limit on the
-  true masses.
+- If both masses scale as 1/sin i, stability requires i > 26° (95% probability), so the true masses are at most
+  2.3 times the minimum masses.
+
+![Figure 1](results/hd127195_stability.png)
+
+*MEGNO maps over the eccentricities (a) and over the period ratio (b), and the fraction of draws that stay regular or
+free of close encounters as a function of inclination (c).*
 
 ## Contents
 
@@ -24,6 +30,7 @@ Research Notes of the AAS.
 | `notebooks/01_jupiter_saturn_validation.ipynb` | Energy conservation and MEGNO tests on the Sun–Jupiter–Saturn system |
 | `notebooks/02_gladman_hill_stability.ipynb` | Reproduction of the Gladman (1993) two-planet Hill stability limit |
 | `notebooks/03_hd127195_first_tests.ipynb` | Target selection from the NASA Exoplanet Archive and first stability tests of HD 127195 |
+| `results/` | Output of the run used in the paper: `results.json`, `maps.npz` and Figure 1 |
 | `requirements.txt` | Python dependencies |
 
 ## Reproducing the paper
