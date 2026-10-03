@@ -492,7 +492,7 @@ def print_summary(R):
         ("N9", f"regular draws lost within {myr(R['n_long']):.1f} Myr", f"{c['regular_lost_by_long']} of {c['regular']}"),
         ("N10", f"chaotic draws lost within 1.5 / {myr(R['n_long']):.1f} / {myr(R['n_very_long']):.0f} Myr",
          f"{c['chaotic_lost_by_1e6']} / {c['chaotic_lost_by_long']} / {c['chaotic_lost_by_very_long']} of {c['chaotic']}"),
-        ("N11", "draws that pass kima's AMD test (own stellar mass / 1.34 Msun)",
+        ("N11", "draws that pass kima's AMD test (with their own stellar mass / with 1.34 Msun but unchanged planet masses)",
          f"{c['amd_stable']} / {c['amd_stable_at_134']} of {c['n']}"),
         ("N12", "AMD limits for the published solution: equal e / e_b alone / e_c alone (collision only)",
          " / ".join(f"{R['amd']['e_limit'][k]:.3f}" for k in ("equal", "b_alone", "c_alone")) + "  (" +
