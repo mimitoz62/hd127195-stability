@@ -194,7 +194,7 @@ def make_draws(post, n, seed=42):
 
 
 # ---------------------------------------------------------------- running and saving jobs
-def run_all(pool, jobs, cache, label):
+def run_all(pool, jobs, cache, label, every=None):
     done = {}
     if os.path.exists(cache):
         for line in open(cache):
@@ -202,7 +202,7 @@ def run_all(pool, jobs, cache, label):
             done[key] = res
     todo = [j for j in jobs if j[0] not in done]
     print(f"{label}: {len(jobs)} runs, {len(jobs) - len(todo)} already saved, {len(todo)} to go", flush=True)
-    t0, step = time.time(), max(1, len(todo) // 20)
+    t0, step = time.time(), every or max(1, len(todo) // 20)
     with open(cache, "a") as fh:
         for i, (key, res) in enumerate(pool.imap_unordered(run_one, todo, chunksize=1), 1):
             done[key] = res
@@ -269,9 +269,12 @@ def main():
                 if not S[f"short|inc|{f}|{k}"][1]:
                     long_jobs.append((f"long|inc|{f}|{k}", "long", (draws[k], f, N_LONG)))
         long_jobs.sort(key=lambda j: -j[2][2])                     # longest first, for an even load
-        cost = per_orbit_seconds(BEST) * sum(j[2][2] for j in long_jobs) / workers / 3600
-        print(f"Stage 2: at most {cost:.1f} h on this machine (less, as unstable runs stop early)", flush=True)
-        L = run_all(pool, long_jobs, cache, "Stage 2, long integrations")
+        sec = per_orbit_seconds(BEST)
+        cost = sec * sum(j[2][2] for j in long_jobs) / workers / 3600
+        print(f"Stage 2: roughly {cost:.1f} h on this machine if every run goes to the end (unstable runs stop"
+              f" early). The longest runs go first and take about {sec * N_VERY_LONG / 60:.0f} min each, so the"
+              f" first progress lines can take that long to appear.", flush=True)
+        L = run_all(pool, long_jobs, cache, "Stage 2, long integrations", every=1)
 
     R = analyse(BEST, draws, lam, post, S, L, lam_off)
     json.dump(R, open("results.json", "w"), indent=1, default=float)
