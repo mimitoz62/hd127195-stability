@@ -7,14 +7,16 @@ Research Notes of the AAS.
 
 ## Results in brief
 
-- A refit of the public radial velocities reproduces the published solution (every median within 0.3σ) and gives the
-  mean longitudes the published table omits: λ_b = 4.31 ± 0.12 and λ_c = 1.02 ± 0.15 rad.
+- A refit of the public radial velocities reproduces the published orbital parameters (within 0.4σ) and gives the
+  mean longitudes the published table omits: λ_b = 4.31 ± 0.12 and λ_c = 1.02 ± 0.15 rad at BJD 2457507.67, the
+  middle of the radial-velocity time span.
 - The published solution is regular (MEGNO ⟨Y⟩ = 2.00) and survives 10⁸ orbits of planet b (146 Myr).
-- Of 200 draws from the posterior, which pass the angular momentum deficit (AMD) test used in the discovery fit, 110
-  are regular; 68 have close encounters within 146 Myr. All 47 draws with both eccentricities below 0.05 survive,
-  against 26% of those with an eccentricity of 0.10 or more.
-- If both masses scale as 1/sin i, fewer than half of the draws avoid close encounters for i ≤ 30°, and the published
-  solution becomes unstable at i ≈ 12°.
+- Of 200 draws from the posterior of the refit, which like the discovery fit keeps only configurations that pass the
+  angular momentum deficit (AMD) test of the kima code, 110 are regular, none with close encounters in 14.6 Myr; 68 of
+  the other 90 have close encounters within 146 Myr. No draw with both eccentricities below 0.05 has an encounter,
+  against 74% of those whose larger eccentricity is 0.10 or more.
+- If both masses scale as 1/sin i, fewer than half of the draws avoid close encounters for 14.6 Myr at i ≤ 30°, and
+  the published solution becomes unstable by i = 11.5°.
 
 ![Figure 1](results/hd127195_stability.png)
 
