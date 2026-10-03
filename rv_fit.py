@@ -9,11 +9,15 @@ as in kima. The fit gives the mean longitudes and their uncertainties, which the
 does not list, and posterior samples with all correlations for the N-body Monte Carlo.
 
 Usage
-    python rv_fit.py RV_FILE            fit, save rv_posterior.npz and print the summary
-    python rv_fit.py RV_FILE --quick    short chains, to test the script
+    python rv_fit.py DATA_DIR            fit, save rv_posterior.npz and print the summary
+    python rv_fit.py DATA_DIR --quick    short chains, to test the script
 
-RV_FILE is the HD 127195 table from CDS (J/A+A/712/A143).
+DATA_DIR holds the four HD 127195 files of the CDS catalogue J/A+A/712/A143 (rv1/HD127195_CORALIE98.dat,
+_CORALIE07.dat, _CORALIE14.dat and _CORALIE24.dat), the data of the published fit.
 """
+import glob
+import os
+import re
 import sys
 import time
 
@@ -31,8 +35,24 @@ PERIOD_RANGE = ((400.0, 700.0), (700.0, 1200.0))   # keeps the planet labels fix
 
 # ---------------------------------------------------------------- data
 def load_rvs(path):
-    """Return t (days), rv and err (m/s), instrument index per point, and instrument names."""
-    raise NotImplementedError("set up once the CDS file format is known")
+    """Return t (BJD - 2400000), rv and err (m/s), instrument index per point, and instrument names.
+    Points with photon noise above 30 m/s are dropped, as in the discovery paper."""
+    files = sorted(glob.glob(os.path.join(path, "HD127195_CORALIE??.dat")))
+    if not files:
+        sys.exit(f"no HD127195_CORALIE??.dat files found in {path}")
+    sets = []
+    for f in files:
+        d = np.loadtxt(f, usecols=(0, 1, 2), ndmin=2)
+        sets.append((d[:, 0].min(), "COR" + re.search(r"CORALIE(\d\d)", f).group(1), d))
+    sets.sort()                                                # instruments in time order
+    t, rv, err, inst, names = [], [], [], [], []
+    for j, (_, name, d) in enumerate(sets):
+        keep = d[:, 2] <= 30.0
+        t += list(d[keep, 0]); rv += list(d[keep, 1]); err += list(d[keep, 2])
+        inst += [j] * int(keep.sum()); names.append(name)
+        if (~keep).any():
+            print(f"{name}: dropped {int((~keep).sum())} points with photon noise above 30 m/s")
+    return np.array(t), np.array(rv), np.array(err), np.array(inst), names
 
 
 # ---------------------------------------------------------------- model
