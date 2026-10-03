@@ -452,14 +452,13 @@ def make_figure(R):
     ax_c.plot(i_deg, [r["regular"] for r in inc], "s--", ms=2.5, lw=1.0, color=BLUE, label="regular")
     if R["best_unstable_from_f"]:
         ax_c.axvline(np.degrees(np.arcsin(1 / R["best_unstable_from_f"])), color="0.5", lw=0.6, ls=":")
-    ax_c.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, handlelength=1.6,
-                columnspacing=1.0, borderaxespad=0.2)
+    ax_c.legend(loc="upper right", frameon=False, handlelength=1.6, borderaxespad=0.4)
     ax_c.set_xscale("log")
     ax_c.set_xticks([6, 10, 20, 30, 45, 90]); ax_c.set_xticklabels(["6", "10", "20", "30", "45", "90"])
     ax_c.minorticks_off()
     ax_c.set_xlim(95, 5.2); ax_c.set_ylim(-0.02, 1.02)
     ax_c.set_xlabel(r"inclination $i$ (deg)"); ax_c.set_ylabel("fraction of draws")
-    letter(ax_c, "(c)", right=True)
+    letter(ax_c, "(c)")
     fig.savefig("hd127195_stability.pdf", bbox_inches="tight")
     fig.savefig("hd127195_stability_preview.png", dpi=200, bbox_inches="tight")
 
