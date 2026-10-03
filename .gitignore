@@ -2,3 +2,5 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 .DS_Store
+/runs_*.jsonl
+/rv_posterior.npz
