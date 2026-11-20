@@ -15,6 +15,9 @@ Research Notes of the AAS.
   angular momentum deficit (AMD) test of the kima code, 110 are regular, none with close encounters in 14.6 Myr; 68 of
   the other 90 have close encounters within 146 Myr. No draw with both eccentricities below 0.05 has an encounter,
   against 74% of those whose larger eccentricity is 0.10 or more.
+- The AMD test of the refit gives the same verdict as kima's own code on every posterior sample. It uses
+  M⋆ = 1.34 M⊙; kima's default is 1 M⊙, and the discovery paper does not say which value its fit used. With 1 M⊙ the
+  test rejects 19% of the samples, and 72% instead of 66% of the remaining draws avoid close encounters.
 - If both masses scale as 1/sin i, fewer than half of the draws avoid close encounters for 14.6 Myr at i ≤ 30°, and
   the published solution becomes unstable by i = 11.5°.
 
@@ -31,6 +34,7 @@ function of inclination.*
 | `rv_fit.py` | Refit of the radial velocities with the model, priors and AMD test of the discovery paper |
 | `paper_analysis.py` | Reproduces every number and Figure 1 of the Research Note |
 | `interaction_check.py` | Size of the planet–planet interaction signal in the radial velocities |
+| `amd_check.py` | Checks of the AMD test in the refit: agreement with kima's own code and the effect of the stellar mass it uses |
 | `data/` | CORALIE radial velocities of HD 127195 from CDS (J/A+A/712/A143) |
 | `notebooks/01_jupiter_saturn_validation.ipynb` | Energy conservation and MEGNO tests on the Sun–Jupiter–Saturn system |
 | `notebooks/02_gladman_hill_stability.ipynb` | Reproduction of the Gladman (1993) two-planet Hill stability limit |
@@ -49,7 +53,11 @@ pip install -r requirements.txt
 python rv_fit.py data                 # a few minutes; writes rv_posterior.npz
 python paper_analysis.py              # one to a few hours; uses all but one CPU core
 python interaction_check.py           # under a minute
+python amd_check.py                   # seconds; reads results/
 ```
+
+`amd_check.py` compares the AMD test with kima's own compiled function when kima is installed (`pip install kima`);
+without kima it skips that comparison and runs the rest.
 
 `paper_analysis.py` prints every number quoted in the paper, labelled [N1] to [N20], and writes Figure 1
 (`hd127195_stability.pdf`) and `results.json`, which holds every Monte Carlo draw and its outcome. Each finished
@@ -61,7 +69,8 @@ Chaotic integrations are sensitive to floating-point rounding, so counts can dif
 
 - Radial velocities: two Keplerian orbits, a linear trend, and an offset and a jitter for each CORALIE setup, with
   the priors of the discovery paper, sampled with emcee. As in the discovery fit, configurations that fail the AMD
-  test of the kima code (orbit crossing, Laskar & Petit 2017; resonance overlap, Petit et al. 2017) are rejected.
+  test of the kima code (orbit crossing, Laskar & Petit 2017; resonance overlap, Petit et al. 2017) get zero
+  likelihood during sampling. The test uses M⋆ = 1.34 M⊙ (Ottoni et al. 2022); kima uses 1 M⊙ unless it is set.
 - Integrator: REBOUND 5.2.0 with WHFast and a time step of P_b/30; spot checks with P_b/60, P_b/100 and IAS15.
 - Chaos indicator: MEGNO ⟨Y⟩ over 2 × 10⁴ orbits of planet b; ⟨Y⟩ < 2.2 counts as regular.
 - Close encounter: the planets approach within the smaller Hill radius, or one is ejected beyond 100 a_c.
